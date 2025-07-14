@@ -54,6 +54,7 @@ Thumbs.db         # Windows 缩略图缓存
 # === 测试相关 ===
 /test_report/     # 测试报告
 /coverage/        # 代码覆盖率报告
+ohosTest/
 
 # === HarmonyOS 特有文件 ===
 /signature/       # 签名证书目录 (敏感!)
