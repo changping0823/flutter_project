@@ -1,0 +1,72 @@
+.DS_Store
+.dart_tool/
+
+.pub/
+
+.idea/
+.vagrant/
+.sconsign.dblite
+.svn/
+
+migrate_working_dir/
+
+*.swp
+profile
+
+DerivedData/
+
+.generated/
+
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+#忽略整个目录，例如build/
+
+xcuserdata
+
+*.moved-aside
+
+*.pyc
+*sync/
+Icon?
+.tags*
+
+# 忽略构建输出目录
+build/
+# 忽略iOS和Android的构建输出目录
+ios/build/
+android/.gradle/
+# 忽略模拟器和设备文件（例如Xcode的DerivedData）
+ios/DerivedData/
+
+# 忽略模拟器和设备文件（例如Xcode的DerivedData）
+ios/DerivedData/
+
+# 忽略IDE配置文件和缓存文件（例如IntelliJ和VSCode）
+*.iml
+*.xcconfig
+*.xcworkspace
+.idea/
+**/node_modules/
+**/android/gradlew.bat
+**/android/gradlew
+**/android/local.properties
+**/android/.idea/
+**/android/app/src/main/kotlin/**/*.kt # Kotlin代码不会被Flutter工具自动格式化，所以可以安全地忽略它们。如果你需要格式化Kotlin代码，请取消注释此行。
+
+
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
