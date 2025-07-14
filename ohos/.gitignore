@@ -1,10 +1,8 @@
-/node_modules
+
 /oh_modules
-/local.properties
-/.idea
+
 **/build
 /.hvigor
-.cxx
 /.clangd
 /.clang-format
 /.clang-tidy
@@ -17,3 +15,53 @@
 **/libs/arm64-v8a/libapp.so
 **/libs/arm64-v8a/libflutter.so
 **/libs/arm64-v8a/libvmservice_snapshot.so
+
+
+# HarmonyOS 项目标准忽略配置
+
+# === 构建系统生成文件 ===
+/build/           # 构建输出目录
+/output/          # 编译输出文件
+/.gradle/         # Gradle 缓存
+*.hprof           # 性能分析文件
+
+# === IDE 配置文件 ===
+/.idea/           # JetBrains IDE 配置
+/.vscode/         # VS Code 配置
+*.iml             # IntelliJ 模块文件
+*.ipr             # IntelliJ 项目文件
+*.iws             # IntelliJ 工作空间文件
+
+# === 本地环境文件 ===
+local.properties  # 本地 SDK 路径配置
+*.keystore        # 签名密钥文件
+*.jks             # Java 密钥库
+env.sh            # 环境变量脚本
+
+# === 缓存和临时文件 ===
+*.log             # 日志文件
+*.tmp             # 临时文件
+*.bak             # 备份文件
+.DS_Store         # macOS 属性文件
+Thumbs.db         # Windows 缩略图缓存
+
+# === 依赖管理 ===
+/node_modules/    # JS 依赖 (如果使用 JS/ArkTS)
+/.repo/           # Repo 工具元数据 (多仓库项目)
+/.cxx/            # C++ 构建缓存
+/.ohpm/           # OHPM 包管理缓存
+
+# === 测试相关 ===
+/test_report/     # 测试报告
+/coverage/        # 代码覆盖率报告
+
+# === HarmonyOS 特有文件 ===
+/signature/       # 签名证书目录 (敏感!)
+/applications/    # 临时应用包 (HAP/HSP)
+/resources/       # 编译生成的资源文件 (保留 sources/resources)
+/rawfile/         # 编译后的原始文件
+
+# === 其他 ===
+*.patch           # 补丁文件
+*.orig            # 合并冲突文件
+*.class           # Java 字节码

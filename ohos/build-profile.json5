@@ -15,7 +15,21 @@
 
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/changping/.ohos/config/default_ohos_lhNUhr837sGeG2NRsIxy-WMkr0XkvFZTROREzNbhwrY=.cer",
+          "storePassword": "0000001B45EEFB98C54EEC6A9602756472DD79165AA5F8E6E51BEA886DC49A89C1DACE2F0223B7F7D82126",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BC96639ABBA31461EC446CF667015E23CE741F63CDF9923805F1B2F156A909B0500246F5F8C25A3",
+          "profile": "/Users/changping/.ohos/config/default_ohos_lhNUhr837sGeG2NRsIxy-WMkr0XkvFZTROREzNbhwrY=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/changping/.ohos/config/default_ohos_lhNUhr837sGeG2NRsIxy-WMkr0XkvFZTROREzNbhwrY=.p12"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
