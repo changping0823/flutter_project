@@ -50,6 +50,8 @@ ios/DerivedData/
 
 # 忽略IDE配置文件和缓存文件（例如IntelliJ和VSCode）
 *.iml
+# 日志文件
+*.log
 *.xcconfig
 *.xcworkspace
 .idea/
