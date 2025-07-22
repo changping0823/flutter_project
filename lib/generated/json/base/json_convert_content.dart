@@ -64,6 +64,8 @@ List<T>? convertListNotNull<T>(dynamic value, {EnumConvertFunction? enumConvert}
       return enumConvert(valueS) as T;
     } else if (type == "String") {
       return valueS as T;
+    } else if (type == "dynamic") {
+      return valueS as T;
     } else if (type == "int") {
       final int? intValue = int.tryParse(valueS);
       if (intValue == null) {

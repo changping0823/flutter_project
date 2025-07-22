@@ -39,6 +39,12 @@ dependencies:
     git:
       url: "https://gitcode.com/openharmony-sig/fluttertpc_get.git"
       ref: master
+
+  webview_flutter:
+    git:
+      url: "https://gitcode.com/openharmony-tpc/flutter_packages.git"
+      path: "packages/webview_flutter/webview_flutter"
+
   dio: ^5.8.0+1
   easy_refresh: ^3.4.0
 

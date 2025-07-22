@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project/utils/Styles.dart';
 import 'package:flutter_project/utils/color_util.dart';
+import 'package:get/get.dart';
 
 enum CustomAppBarThemeType {
   /// 默认
@@ -29,9 +30,9 @@ class CustomAppBar extends AppBar {
 
   CustomAppBar({
     super.key,
-    super.leading,
     super.actions,
     String? title,
+    VoidCallback? onBackPressed,
     bool showBottomDivider = true,
     CustomAppBarThemeType themeType = CustomAppBarThemeType.yellow,
 
@@ -43,6 +44,21 @@ class CustomAppBar extends AppBar {
     ),
     bottomOpacity: showBottomDivider ? 1.0: 0.0,
     backgroundColor: themeType.backgroundColor,
+    toolbarHeight: 44,
+    centerTitle:  true, /// 文字居中显示
+    automaticallyImplyLeading:  false, /// 隐藏默认返回按钮
+    leading: (Get.currentRoute != '/') ? IconButton(
+      icon: Image.asset(themeType.backIcon, width: 24, height: 24,),
+      onPressed: onBackPressed ?? () {
+        Get.back();
+        // Get.rou
+      },
+    ): null,
   );
 
+
 }
+
+// bool _canGoBack() {
+//   return Get.keys[Get.keys.keys.first]?.currentState?.canPop() ?? false;
+// }

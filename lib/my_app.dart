@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
           /// 设置AppBar 的表面颜色为透明色
-          surfaceTintColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent
         ),
       ),
       home: const MainPage(),

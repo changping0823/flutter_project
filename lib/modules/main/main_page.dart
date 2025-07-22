@@ -13,7 +13,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
-
+  final PageController _pageController = PageController();
   final List<BottomNavigationBarItem> _items = const [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
@@ -60,12 +60,18 @@ class _MainPageState extends State<MainPage> {
         unselectedLabelStyle: _itemTextStyle,
 
       ),
-      body: _children[_currentIndex],
+      body: PageView (/// PageView 可以实现懒加载
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(), // 禁止滑动切换
+        children: _children,
+      ),
+      // body: _children[_currentIndex],
     );
   }
 
   void _onItemTapped(int index) {
     setState(() {
+      _pageController.jumpToPage(index); // 跳转页面
       _currentIndex = index;
     });
   }

@@ -8,11 +8,20 @@ class HttpResponse<T> {
 	T? datas;
 	int? offset;
 	bool? over;
-	int? pageCount;
+	int pageCount;
 	int? size;
 	int? total;
 
-	HttpResponse();
+	HttpResponse({
+		this.pageCount = 0,
+		this.curPage,
+		this.datas,
+		this.offset,
+		this.over,
+		this.size,
+		this.total,
+	});
+
 
 	factory HttpResponse.fromJson(Map<String, dynamic> json) => $HttpResponseFromJson<T>(json);
 
