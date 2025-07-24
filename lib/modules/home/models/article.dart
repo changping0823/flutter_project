@@ -16,7 +16,7 @@ class Article {
 	String? desc;
 	String? descMd;
 	String? envelopePic;
-	bool? fresh;
+	bool fresh;
 	String? host;
 	double? id;
 	bool? isAdminAdd;
@@ -40,7 +40,9 @@ class Article {
 	double? visible;
 	double? zan;
 
-	Article();
+	Article({
+		this.fresh = false,
+});
 
 	factory Article.fromJson(Map<String, dynamic> json) => $ArticleFromJson(json);
 

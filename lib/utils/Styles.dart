@@ -46,3 +46,12 @@ TextStyle get textStyle_8c_14 => const TextStyle(
   color: ColorUtil.text_8c,
   fontSize: 14,
 );
+TextStyle get textStyle_8c_12 => const TextStyle(
+  color: ColorUtil.text_8c,
+  fontSize: 12,
+);
+
+TextStyle get textStyle_d9_14 => const TextStyle(
+  color: ColorUtil.text_d9,
+  fontSize: 14,
+);

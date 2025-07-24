@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import '../../generated/json/base/json_convert_content.dart';
 import 'http_response.dart';
+import 'package:html/parser.dart' show parse;
 
 const String baseUrl = 'https://www.wanandroid.com';
 class HttpUtil {
@@ -15,6 +17,9 @@ class HttpUtil {
   HttpUtil._internal() {
     _baseOptions = BaseOptions(
       baseUrl: baseUrl,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8'
+      },
       connectTimeout: const Duration(milliseconds: 5000),
       receiveTimeout: const Duration(milliseconds: 5000),
     );
@@ -27,9 +32,14 @@ class HttpUtil {
   }
 
 
-  Future<HttpResponse<T>> get<T>(String url, {Map<String, dynamic>? params}) async {
+  Future<HttpResponse<T>> getPage<T>(String url, {Map<String, dynamic>? params}) async {
     var response = await _dio.get(url);
     if (response.statusCode == HttpStatus.ok) {
+      // 如果返回的是字符串，先解码 HTML 实体
+      var data = response.data;
+      if (data is String) {
+        data = parse(data).documentElement?.text ?? data;
+      }
       if(response.data["errorCode"] == 0) {
         return HttpResponse.fromJson(response.data["data"]);
       }
@@ -37,10 +47,40 @@ class HttpUtil {
     return response.data;
   }
 
-  Future<dynamic> post(String url, {Map<String, dynamic>? params}) async {
-    var response = await _dio.post(url, data: params);
+  Future<T?> get<T>(String url, {Map<String, dynamic>? params}) async {
+    var response = await _dio.get(url);
+    if (response.statusCode == HttpStatus.ok) {
+      // 如果返回的是字符串，先解码 HTML 实体
+      var data = response.data;
+      if (data is String) {
+        data = parse(data).documentElement?.text ?? data;
+      }
+      if(response.data["errorCode"] == 0) {
+        return JsonConvert.fromJsonAsT<T>(response.data['data']);
+      }
+    }
     return response.data;
   }
+
+  Future<HttpResponse<T>> post<T>(String url, {Map<String, dynamic>? params}) async {
+    var response = await _dio.post(url, data: params);
+    return _handleResponse(response);
+  }
+
+  _handleResponse<T>(Response response) {
+    if (response.statusCode == HttpStatus.ok) {
+      // 如果返回的是字符串，先解码 HTML 实体
+      var data = response.data;
+      if (data is String) {
+        data = parse(data).documentElement?.text ?? data;
+      }
+      if(response.data["errorCode"] == 0) {
+        return HttpResponse.fromJson(response.data["data"]);
+      }
+    }
+    return response.data;
+  }
+
  }
 
 

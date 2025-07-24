@@ -17,7 +17,7 @@ class _ProfilePageState extends State<ProfilePage> with AutomaticKeepAliveClient
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: '我的'),
+      appBar: CustomAppBar(title: '我的', themeType: CustomAppBarThemeType.white),
       body: Container(
         color: Colors.white,
         child: Center(

@@ -40,7 +40,7 @@ HttpResponse<T> $HttpResponseFromJson<T>(Map<String, dynamic> json) {
 Map<String, dynamic> $HttpResponseToJson(HttpResponse entity) {
 	final Map<String, dynamic> data = <String, dynamic>{};
 	data['curPage'] = entity.curPage;
-	data['datas'] = entity.datas;
+	data['datas'] = entity.datas?.toJson();
 	data['offset'] = entity.offset;
 	data['over'] = entity.over;
 	data['pageCount'] = entity.pageCount;

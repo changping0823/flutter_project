@@ -31,18 +31,19 @@ class CustomAppBar extends AppBar {
   CustomAppBar({
     super.key,
     super.actions,
+    PreferredSizeWidget? bottom,
     String? title,
     VoidCallback? onBackPressed,
-    bool showBottomDivider = true,
+    bool showBottomDivider = true, /// 是否显示底部分割线，自定义bottom时无效
     CustomAppBarThemeType themeType = CustomAppBarThemeType.yellow,
 
   }): super(
     title: Text(title?? "", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: themeType.titleColor)),
-    bottom: PreferredSize(
+    bottom: bottom ?? PreferredSize(
       preferredSize: const Size.fromHeight(1),
       child: divider_gray_f7_1,
     ),
-    bottomOpacity: showBottomDivider ? 1.0: 0.0,
+    bottomOpacity: (showBottomDivider || bottom != null) ? 1.0: 0.0,
     backgroundColor: themeType.backgroundColor,
     toolbarHeight: 44,
     centerTitle:  true, /// 文字居中显示
