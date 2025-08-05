@@ -46,6 +46,9 @@ class _WebViewPageState extends State<WebViewPage> {
             _progress = progress * 0.01;
           });
         },
+        onWebResourceError: (error) {
+          debugPrint("onWebResourceError: ${error.description}");
+        },
       ));
 
     _controller.getTitle().then((value) {

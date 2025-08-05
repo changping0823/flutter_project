@@ -1,16 +1,20 @@
 
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_project/modules/home/widgets/home_article_item.dart';
-import 'package:flutter_project/modules/home/widgets/home_banner_widget.dart';
-import 'package:flutter_project/utils/color_util.dart';
+import 'package:easy_refresh/easy_refresh.dart';
+
 import 'package:flutter_project/widgets/custom_app_bar.dart';
 import 'package:flutter_project/widgets/refresh/refresh_list_view.dart';
 
 import 'package:flutter_project/utils/http_tools/http_util.dart';
 import 'package:flutter_project/utils/http_tools/http_response.dart';
+
+import 'package:flutter_project/modules/home/widgets/home_banner_widget.dart';
+import 'package:flutter_project/modules/home/widgets/home_commonly_widget.dart';
+import 'package:flutter_project/modules/home/widgets/home_article_item.dart';
+
 import '../models/article.dart';
 import '../models/banner_model.dart';
+import '../models/commonly.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -22,7 +26,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
 
   List<Article> _articles = [];
-  List<BannerModel>? _banners = [];
+  List<BannerModel> _banners = [];
+  List<Commonly> _commonly = [];
   int _page = 0;
   int _pageCount = 0;
 
@@ -36,7 +41,11 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
     // _queryArticles();
     _queryBanners();
-
+    HttpManager.get<List<Commonly>>('/friend/json').then((value) {
+      setState(() {
+        _commonly = value ?? [];
+      });
+    });
   }
 
   @override
@@ -67,31 +76,39 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 
   _buildListView() {
-    return ListView.builder(
-      itemBuilder: (BuildContext context, int index) {
-        if (index == 0) {
-          return Padding(
+    return CustomScrollView(
+      slivers: [
+        SliverToBoxAdapter(
+          child: Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: HomeBannerWidget(banners: _banners),
-          );
-        }
-        return HomeArticleItem(article: _articles[index - 1],);
-      },
-      itemCount: _articles.length + 1,
+          )
+        ),
+        SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: HomeCommonlyWidget(commons: _commonly),
+            )
+        ),
+        SliverList(delegate: SliverChildBuilderDelegate((BuildContext context, int index) {
+          return HomeArticleItem(article: _articles[index]);
+        }, childCount: _articles.length))
+      ],
+
     );
   }
 
   _queryBanners() {
-    HttpUtil().get<List<BannerModel>?>('/banner/json').then((value) {
+    HttpManager.get<List<BannerModel>?>('/banner/json').then((value) {
       setState(() {
-        _banners = value;
+        _banners = value ?? [];
       });
     });
 
   }
   _queryArticles({bool isRefresh = true}) async {
 
-    HttpResponse<List<Article>?> value = await HttpUtil().getPage<List<Article>?>('/article/list/$_page/json');
+    HttpResponse<List<Article>?> value = await HttpManager.getPage<List<Article>?>('/article/list/$_page/json');
     setState(() {
       _pageCount = value.pageCount;
       if (isRefresh) {

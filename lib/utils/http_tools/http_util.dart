@@ -12,7 +12,8 @@ class HttpUtil {
   late Dio _dio;
   late BaseOptions _baseOptions;
 
-  factory HttpUtil() => _instance;
+  // 3. 公共的、静态的访问点（全局访问点）
+  static HttpUtil get instance => _instance;
 
   HttpUtil._internal() {
     _baseOptions = BaseOptions(
@@ -110,3 +111,7 @@ class CustomInterceptor extends Interceptor {
     super.onError(err, handler);
   }
 }
+
+// HttpManager httpManager = HttpUtil();
+
+HttpUtil get HttpManager => HttpUtil.instance;

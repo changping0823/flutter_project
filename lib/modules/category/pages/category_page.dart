@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project/modules/home/models/commonly.dart';
+import 'package:flutter_project/utils/http_tools/http_util.dart';
 import 'package:flutter_project/widgets/custom_app_bar.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -13,6 +15,12 @@ class _CategoryPageState extends State<CategoryPage> with AutomaticKeepAliveClie
   @override
   bool get wantKeepAlive => true;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

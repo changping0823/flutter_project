@@ -17,7 +17,6 @@ class RefreshFooter extends Footer {
 
   @override
   Widget build(BuildContext context, IndicatorState state) {
-    debugPrint('state.mode: ${state.mode}');
     return SizedBox(
       height: 46,
       child: (state.result == IndicatorResult.noMore) ? _buildNoMoreWidget(state) : _buildLoadingWidget(state),

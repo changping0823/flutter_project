@@ -1,8 +1,8 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_project/modules/home/pages/home_page.dart';
 import 'package:flutter_project/modules/category/pages/category_page.dart';
+import 'package:flutter_project/modules/navigation/pages/navigation_page.dart';
 import 'package:flutter_project/modules/profile/pages/profile_page.dart';
 import 'package:flutter_project/utils/color_util.dart';
 
@@ -27,6 +27,10 @@ class _MainPageState extends State<MainPage> {
       label: '分类',
     ),
     BottomNavigationBarItem(
+      icon: Icon(Icons.navigation),
+      label: '导航',
+    ),
+    BottomNavigationBarItem(
       icon: Icon(Icons.person),
       label: '我的',
     )
@@ -35,6 +39,7 @@ class _MainPageState extends State<MainPage> {
   final List<Widget> _children = [
     const HomePage(), // 首页
     const CategoryPage(),
+    const NavigationPage(),
     const ProfilePage(), // 用户资料页
   ];
 
@@ -84,6 +89,7 @@ class _MainPageState extends State<MainPage> {
       selectedLabelStyle: _itemTextStyle,
       // 自定义未选中项的文字样式
       unselectedLabelStyle: _itemTextStyle,
+      type: BottomNavigationBarType.fixed, // 确保类型设置为fixed以显示文字标签
     );
   }
 }

@@ -6,18 +6,46 @@
 import 'package:flutter/material.dart' show debugPrint;
 import 'package:flutter_project/modules/home/models/article.dart';
 import 'package:flutter_project/modules/home/models/banner_model.dart';
+import 'package:flutter_project/modules/home/models/commonly.dart';
 import 'package:flutter_project/utils/http_tools/http_response.dart';
 
 JsonConvert jsonConvert = JsonConvert();
+
 typedef JsonConvertFunction<T> = T Function(Map<String, dynamic> json);
 typedef EnumConvertFunction<T> = T Function(String value);
+typedef ConvertExceptionHandler = void Function(Object error, StackTrace stackTrace);
+extension MapSafeExt<K, V> on Map<K, V> {
+  T? getOrNull<T>(K? key) {
+    if (!containsKey(key) || key == null) {
+      return null;
+    } else {
+      return this[key] as T?;
+    }
+  }
+}
 
 class JsonConvert {
-	static final Map<String, JsonConvertFunction> convertFuncMap = {
-		(Article).toString(): Article.fromJson,
-		(BannerModel).toString(): BannerModel.fromJson,
-		(HttpResponse).toString(): HttpResponse.fromJson,
-	};
+  static ConvertExceptionHandler? onError;
+  JsonConvertClassCollection convertFuncMap = JsonConvertClassCollection();
+
+  /// When you are in the development, to generate a new model class, hot-reload doesn't find new generation model class, you can build on MaterialApp method called jsonConvert. ReassembleConvertFuncMap (); This method only works in a development environment
+  /// https://flutter.cn/docs/development/tools/hot-reload
+  /// class MyApp extends StatelessWidget {
+  ///    const MyApp({Key? key})
+  ///        : super(key: key);
+  ///
+  ///    @override
+  ///    Widget build(BuildContext context) {
+  ///      jsonConvert.reassembleConvertFuncMap();
+  ///      return MaterialApp();
+  ///    }
+  /// }
+  void reassembleConvertFuncMap() {
+    bool isReleaseMode = const bool.fromEnvironment('dart.vm.product');
+    if (!isReleaseMode) {
+      convertFuncMap = JsonConvertClassCollection();
+    }
+  }
 
   T? convert<T>(dynamic value, {EnumConvertFunction? enumConvert}) {
     if (value == null) {
@@ -30,30 +58,43 @@ class JsonConvert {
       return _asT<T>(value, enumConvert: enumConvert);
     } catch (e, stackTrace) {
       debugPrint('asT<$T> $e $stackTrace');
+      if (onError != null) {
+        onError!(e, stackTrace);
+      }
       return null;
     }
   }
 
-  List<T?>? convertList<T>(List<dynamic>? value, {EnumConvertFunction? enumConvert}) {
+  List<T?>? convertList<T>(List<dynamic>? value,
+      {EnumConvertFunction? enumConvert}) {
     if (value == null) {
       return null;
     }
     try {
-      return value.map((dynamic e) => _asT<T>(e,enumConvert: enumConvert)).toList();
+      return value.map((dynamic e) => _asT<T>(e, enumConvert: enumConvert))
+          .toList();
     } catch (e, stackTrace) {
       debugPrint('asT<$T> $e $stackTrace');
+      if (onError != null) {
+        onError!(e, stackTrace);
+      }
       return <T>[];
     }
   }
 
-List<T>? convertListNotNull<T>(dynamic value, {EnumConvertFunction? enumConvert}) {
+  List<T>? convertListNotNull<T>(dynamic value,
+      {EnumConvertFunction? enumConvert}) {
     if (value == null) {
       return null;
     }
     try {
-      return (value as List<dynamic>).map((dynamic e) => _asT<T>(e,enumConvert: enumConvert)!).toList();
+      return (value as List<dynamic>).map((dynamic e) =>
+      _asT<T>(e, enumConvert: enumConvert)!).toList();
     } catch (e, stackTrace) {
       debugPrint('asT<$T> $e $stackTrace');
+      if (onError != null) {
+        onError!(e, stackTrace);
+      }
       return <T>[];
     }
   }
@@ -89,35 +130,69 @@ List<T>? convertListNotNull<T>(dynamic value, {EnumConvertFunction? enumConvert}
         if (value == null) {
           return null;
         }
-        return convertFuncMap[type]!(Map<String, dynamic>.from(value)) as T;
+        var covertFunc = convertFuncMap[type]!;
+        if (covertFunc is Map<String, dynamic>) {
+          return covertFunc(value as Map<String, dynamic>) as T;
+        } else {
+          return covertFunc(Map<String, dynamic>.from(value)) as T;
+        }
       } else {
-        throw UnimplementedError('$type unimplemented');
+        throw UnimplementedError(
+            '$type unimplemented,you can try running the app again');
       }
     }
   }
 
-	//list is returned by type
-	static M? _getListChildType<M>(List<Map<String, dynamic>> data) {
-		if(<Article>[] is M){
-			return data.map<Article>((Map<String, dynamic> e) => Article.fromJson(e)).toList() as M;
-		}
-		if(<BannerModel>[] is M){
-			return data.map<BannerModel>((Map<String, dynamic> e) => BannerModel.fromJson(e)).toList() as M;
-		}
-		if(<HttpResponse>[] is M){
-			return data.map<HttpResponse>((Map<String, dynamic> e) => HttpResponse.fromJson(e)).toList() as M;
-		}
+  //list is returned by type
+  static M? _getListChildType<M>(List<Map<String, dynamic>> data) {
+    if (<Article>[] is M) {
+      return data.map<Article>((Map<String, dynamic> e) => Article.fromJson(e))
+          .toList() as M;
+    }
+    if (<BannerModel>[] is M) {
+      return data.map<BannerModel>((Map<String, dynamic> e) =>
+          BannerModel.fromJson(e)).toList() as M;
+    }
+    if (<Commonly>[] is M) {
+      return data.map<Commonly>((Map<String, dynamic> e) =>
+          Commonly.fromJson(e)).toList() as M;
+    }
+    if (<HttpResponse>[] is M) {
+      return data.map<HttpResponse>((Map<String, dynamic> e) =>
+          HttpResponse.fromJson(e)).toList() as M;
+    }
 
-		debugPrint("${M.toString()} not found");
-	
-		return null;
+    debugPrint("$M not found");
+
+    return null;
+  }
+
+  static M? fromJsonAsT<M>(dynamic json) {
+    if (json is M) {
+      return json;
+    }
+    if (json is List) {
+      return _getListChildType<M>(
+          json.map((dynamic e) => e as Map<String, dynamic>).toList());
+    } else {
+      return jsonConvert.convert<M>(json);
+    }
+  }
 }
 
-	static M? fromJsonAsT<M>(dynamic json) {
-		if (json is List) {
-			return _getListChildType<M>(json.map((e) => e as Map<String, dynamic>).toList());
-		} else {
-			return jsonConvert.convert<M>(json);
-		}
-	}
+class JsonConvertClassCollection {
+  Map<String, JsonConvertFunction> convertFuncMap = {
+    (Article).toString(): Article.fromJson,
+    (BannerModel).toString(): BannerModel.fromJson,
+    (Commonly).toString(): Commonly.fromJson,
+    (HttpResponse).toString(): HttpResponse.fromJson,
+  };
+
+  bool containsKey(String type) {
+    return convertFuncMap.containsKey(type);
+  }
+
+  JsonConvertFunction? operator [](String key) {
+    return convertFuncMap[key];
+  }
 }

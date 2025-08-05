@@ -20,11 +20,16 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final bannerCount = widget.banners?.length ?? 0;
+    // 如果没有banner数据，返回空容器
+    if (bannerCount == 0) {
+      return const SizedBox.shrink();
+    }
     return Stack(
       children: [
         CarouselSlider.builder(
             carouselController: _carouselController,
-            itemCount: widget.banners?.length,
+            itemCount: widget.banners == null ? 0 : widget.banners?.length,
             itemBuilder: (context, itemIndex, pageIndex) {
               return SizedBox(
                 width: MediaQuery.of(context).size.width,
@@ -50,13 +55,14 @@ class _HomeBannerWidgetState extends State<HomeBannerWidget> {
             bottom: 10,
             child: Center(
               child: AnimatedSmoothIndicator(
-                count: widget.banners!.length,
+                count: bannerCount,
                 effect: const WormEffect(
                   dotHeight: 8,
                   dotWidth: 8,
                   dotColor: ColorUtil.text_d9,
                   activeDotColor: ColorUtil.main,
-                ), activeIndex: _currentIndex,
+                ),
+                activeIndex: _currentIndex,
               ),
             )
         )
