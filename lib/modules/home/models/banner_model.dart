@@ -1,6 +1,7 @@
-import 'package:flutter_project/generated/json/base/json_field.dart';
-import 'package:flutter_project/generated/json/banner_model.g.dart';
+
+import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
+part 'banner_model.g.dart';
 
 @JsonSerializable()
 class BannerModel {
@@ -15,9 +16,12 @@ class BannerModel {
 
 	BannerModel();
 
-	factory BannerModel.fromJson(Map<String, dynamic> json) => $BannerModelFromJson(json);
-
-	Map<String, dynamic> toJson() => $BannerModelToJson(this);
+	factory BannerModel.fromJson(Map<String, dynamic> json) => _$BannerModelFromJson(json);
+	// 处理列表的工厂方法
+	static List<BannerModel> fromJsonList(List<dynamic> list) {
+		return list.map((e) => BannerModel.fromJson(e as Map<String, dynamic>)).toList();
+	}
+	Map<String, dynamic> toJson() => _$BannerModelToJson(this);
 
 	@override
 	String toString() {

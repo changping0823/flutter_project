@@ -1,7 +1,7 @@
-import 'package:flutter_project/generated/json/base/json_field.dart';
-import 'package:flutter_project/generated/json/commonly.g.dart';
+
+import 'package:json_annotation/json_annotation.dart';
 import 'dart:convert';
-export 'package:flutter_project/generated/json/commonly.g.dart';
+part 'commonly.g.dart';
 
 @JsonSerializable()
 class Commonly {
@@ -15,9 +15,11 @@ class Commonly {
 
 	Commonly();
 
-	factory Commonly.fromJson(Map<String, dynamic> json) => $CommonlyFromJson(json);
-
-	Map<String, dynamic> toJson() => $CommonlyToJson(this);
+	factory Commonly.fromJson(Map<String, dynamic> json) => _$CommonlyFromJson(json);
+	static List<Commonly> fromJsonList(List<dynamic> list) {
+		return list.map((e) => Commonly.fromJson(e as Map<String, dynamic>)).toList();
+	}
+	Map<String, dynamic> toJson() => _$CommonlyToJson(this);
 
 	@override
 	String toString() {

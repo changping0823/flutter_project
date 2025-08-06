@@ -18,7 +18,12 @@ class _NavigationPageState extends State<NavigationPage> with AutomaticKeepAlive
     // TODO: implement initState
     super.initState();
 
-    HttpManager.get<List<dynamic>>("/navi/json").then((value) {
+    HttpManager.get<List<dynamic>>("/navi/json", fromJson: (json) {
+      if (json is List) {
+        return [];
+      }
+      throw "json is not List";
+    }).then((value) {
       debugPrint(value.toString());
     });
   }

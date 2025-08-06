@@ -41,7 +41,12 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
     // _queryArticles();
     _queryBanners();
-    HttpManager.get<List<Commonly>>('/friend/json').then((value) {
+    HttpManager.get<List<Commonly>>('/friend/json', fromJson: (json) {
+      if (json is List) {
+        return Commonly.fromJsonList(json);
+      }
+      throw FormatException('Expected List but got ${json.runtimeType}');
+    }).then((value) {
       setState(() {
         _commonly = value ?? [];
       });
@@ -99,7 +104,13 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
 
   _queryBanners() {
-    HttpManager.get<List<BannerModel>?>('/banner/json').then((value) {
+    HttpManager.get<List<BannerModel>?>('/banner/json', fromJson: (json) {
+      // 处理列表类型数据
+      if (json is List) {
+        return BannerModel.fromJsonList(json);
+      }
+      throw FormatException('Expected List but got ${json.runtimeType}');
+    }).then((value) {
       setState(() {
         _banners = value ?? [];
       });
@@ -108,7 +119,13 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
   }
   _queryArticles({bool isRefresh = true}) async {
 
-    HttpResponse<List<Article>?> value = await HttpManager.getPage<List<Article>?>('/article/list/$_page/json');
+    HttpResponse<List<Article>?> value = await HttpManager.getPage<List<Article>?>('/article/list/$_page/json', fromJson: (json) {
+      // 处理列表类型数据
+      if (json is List) {
+        return Article.fromJsonList(json);
+      }
+      throw FormatException('Expected List but got ${json.runtimeType}');
+    });
     setState(() {
       _pageCount = value.pageCount;
       if (isRefresh) {

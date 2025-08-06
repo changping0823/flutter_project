@@ -1,6 +1,7 @@
-import 'package:flutter_project/generated/json/base/json_field.dart';
-import 'package:flutter_project/generated/json/article.g.dart';
+
 import 'dart:convert';
+import 'package:json_annotation/json_annotation.dart';
+part 'article.g.dart';
 
 @JsonSerializable()
 class Article {
@@ -44,9 +45,13 @@ class Article {
 		this.fresh = false,
 });
 
-	factory Article.fromJson(Map<String, dynamic> json) => $ArticleFromJson(json);
+	factory Article.fromJson(Map<String, dynamic> json) => _$ArticleFromJson(json);
+	// 处理列表的工厂方法
+	static List<Article> fromJsonList(List<dynamic> list) {
+		return list.map((e) => Article.fromJson(e as Map<String, dynamic>)).toList();
+	}
 
-	Map<String, dynamic> toJson() => $ArticleToJson(this);
+	Map<String, dynamic> toJson() => _$ArticleToJson(this);
 
 	@override
 	String toString() {
